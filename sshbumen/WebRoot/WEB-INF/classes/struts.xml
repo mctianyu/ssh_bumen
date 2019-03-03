@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+     <!-- 禁用动态调用方法 -->
+     <constant name="struts.enable.DynamicMethodInvocation" value="false"></constant>
+     <constant name="struts.devMode" value="true" />
+     <package name="ssh" extends="struts-default" namespace="/">
+      <interceptors>
+      <!-- 注册拦截器 -->
+      <interceptor name="myinterceptor" class="org.bigjava.lan.MyInterceptor"/>
+      <!-- 定义拦截器栈 -->
+      <interceptor-stack name="myStack">
+      <interceptor-ref name="defaultStack"></interceptor-ref>
+      <interceptor-ref name="myinterceptor"></interceptor-ref>
+      </interceptor-stack>
+      </interceptors>  
+        <!-- 通过此Action访问后台管理页面 ，需要判断用户是否已登录，如果未登录则跳转到登录页面-->
+        <action name="myinterceptor">
+        <result>/frame.jsp</result>
+         <!-- 引用自定义的拦截器栈 -->
+        <interceptor-ref name="myStack"></interceptor-ref>
+        <result name="login">/index.jsp</result>   
+        </action>
+    <action name="employee_*" class="employeeAction" method="{1}">
+    <result name="error">/index.jsp</result>
+    <result name="success" type="redirect">/frame.jsp</result>
+    <result name="findAll">/frame/listEmployee.jsp</result>
+    <result name="saveUI">/frame/addEmployee.jsp</result>
+    <result name="saveSuccess" type="redirectAction">employee_findAll.action</result>
+    <result name="updateSuccess" type="redirectAction">employee_findAll.action</result>
+    <result name="deleteSuccess" type="redirectAction">employee_findAll.action</result>
+    <result name="editSuccess">/frame/editEmployee.jsp</result>
+    
+</action>  
+    
+    <action name="department_*" class="departmentAction" method="{1}">
+    
+    <result name="findAll">/frame/list.jsp</result>
+    <result name="saveUI">/frame/addDepartment.jsp</result>
+    <result name="saveSuccess" type="redirectAction">department_findAll.action</result>
+    <result name="updateSuccess" type="redirectAction">department_findAll.action</result>
+    <result name="deleteSuccess" type="redirectAction">department_findAll.action</result>
+    <result name="editSuccess">/frame/editDepartment.jsp</result>
+    </action>  
+ </package>
+</struts>     
